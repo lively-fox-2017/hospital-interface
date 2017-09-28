@@ -29,9 +29,9 @@ class Hospital {
 		  	if(input_username === Employee.auth_userName(input_username) && input_pass === Employee.auth_passWord(input_pass)){
 		  		console.log('berhasil')
 		  		switch(Employee.auth_position(input_username)){
-		  			case 'admin' 			: console.log('==*=admin');break;
-		  			case 'doctor' 		: console.log('=*=doctor');break;
-		  			case 'office boy' : console.log('=office boy*');break;
+		  			case 'admin' 			: this.adminPage(input_username);break;
+		  			case 'doctor' 		: this.doctorPage(input_username);break;
+		  			case 'office boy' : this.officeBoyPage(input_username);break;
 		  		}
 		  	}else{
 		  		console.log(`wrong username or password`) 
@@ -41,13 +41,31 @@ class Hospital {
 		})	
 	}
 
+
+	static adminPage(name){
+		console.log(`-------------------------------------------\nWelcome, ${Employee.yourNameIs(name)}. Your access level is: ADMIN\n-------------------------------------------`)
+		console.log(`What would you like to do?\nOptions:\n- list_doctor\n- add_doctor\n- remove_doctor\n- list_patients\n- view_records <patient_id>\n- add_record <patient_id>\n- remove_record <patient_id> <record_id>\n- logout`)
+	}
+
+	static doctorPage(name){
+		console.log(`-------------------------------------------\nWelcome, ${Employee.yourNameIs(name)}. Your access level is: DOCTOR\n-------------------------------------------`)
+		console.log(`What would you like to do?\nOptions:\n- list_patients\n- view_records <patient_id>\n- add_record <patient_id>\n- remove_record <patient_id> <record_id>\n- logout`)
+	}
+
+	static dofficeBoyPagePage(name){
+		console.log(`-------------------------------------------\nWelcome, ${Employee.yourNameIs(name)}. Your access level is: OFFICE BOY\n-------------------------------------------`)
+		console.log(`What would you like to do?\nOptions:\n- logout`)
+	}
+
   
 
 
 
 }
 
+
 Hospital.login()
+//Hospital.adminPage()
 
 
 module.exports = Hospital

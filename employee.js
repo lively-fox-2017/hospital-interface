@@ -54,9 +54,24 @@ class Employee {
   	return result.join()
   }
 
+  static yourNameIs(name){
+  	let result = []
+
+  	for(let l = 0; l< data.length; l++){
+  		//console.log('======' + data[k].username)
+  		//console.log(input_username)
+  		if(name === data[l].username){
+  			result.push(data[l].name)
+  		}
+  	}
+  	//console.log(result.join())
+  	return result.join()
+  }
+
 }
 
-Employee.auth_userName()
-Employee.auth_passWord()
-Employee.auth_position()
+// Employee.auth_userName()
+// Employee.auth_passWord()
+// Employee.auth_position()
+//Employee.yourNameis()
 module.exports = Employee
