@@ -52,7 +52,7 @@ class Hospital {
 					that.menuDoctor();
 					break;
 				case "officeboy":
-					that.menuOfficeBoy;
+					that.menuOB();
 					break;
 			}
 		} else {
@@ -296,7 +296,12 @@ class Hospital {
   addRecord_employee_position(name) {
 	let that = this;
 	rl.question(">Employee Position : ", (positionAnswer)=>{
-		if (positionAnswer) {
+		if (positionAnswer === "9"){
+			return that.menuAdmin();
+		} else if (positionAnswer.toLowerCase() === "admin") {
+			console.log("Maaf tidak boleh menambahkan admin");
+			return that.addRecord_employee_position(name);
+		} else if (positionAnswer.toLowerCase() === "doctor" || positionAnswer.toLowerCase() === "officeboy") {
 			that.addRecord_employee_username(name, positionAnswer);
 		} else {
 			that.errLog();
@@ -308,7 +313,9 @@ class Hospital {
   addRecord_employee_username(name, position) {
 	let that = this;
 	rl.question(">Username : ", (usernameAnswer)=>{
-		if (usernameAnswer) {
+		if (usernameAnswer === "9"){
+			return that.menuAdmin();
+		} else if (usernameAnswer) {
 			that.addRecord_employee_password(name, position, usernameAnswer);
 		} else {
 			that.errLog();
@@ -320,7 +327,9 @@ class Hospital {
   addRecord_employee_password(name, position, username) {
 	let that = this;
 	rl.question(">Password : ", (passwordAnswer)=>{
-		if (passwordAnswer) {
+		if (passwordAnswer === "9"){
+			return that.menuAdmin();
+		} else if (passwordAnswer) {
 			let incId = that.employees.length+1;
 			that.employees.push({id:incId, name:name, position:position.toLowerCase(), username:username, password:passwordAnswer});
 			fs.writeFileSync("employees.json", JSON.stringify(that.employees, null, 2));
@@ -368,7 +377,13 @@ class Hospital {
   addRecord_patient_diagnose(name) {
 	let that = this;
 	rl.question(">Patient Diagnose : ", (diagnoseAnswer)=>{
-		if (diagnoseAnswer) {
+		if (diagnoseAnswer === "9") {
+			if (that.tempPosition === "doctor") {
+				return that.menuDoctor();
+			} else {
+				return that.menuAdmin();
+			}
+		} else if (diagnoseAnswer) {
 			let incId = that.patients.length+1;
 			that.patients.push({id:incId, name:name, diagnosis:diagnoseAnswer});
 			fs.writeFileSync("patients.json", JSON.stringify(that.patients, null, 2));
@@ -392,12 +407,17 @@ class Hospital {
 		return this.menuAdmin();
 	} else {
 		rl.question(">Id employee yang ingin dihapus : ", (answerID)=>{
-			for (let i = 1; i < that.employees.length; i++) {
+			for (let i = 0; i < that.employees.length; i++) {
 				if (answerID === that.employees[i].id.toString()) {
-					that.employees.splice(i, 1);
-					console.log("\n~~Data employee berhasil dihapus");
-					fs.writeFileSync("employees.json", JSON.stringify(that.employees, null, 2));
-					return that.menuAdmin();
+					if (that.employees[i].position !== "admin") {
+						that.employees.splice(i, 1);
+						console.log("\n~~Data employee berhasil dihapus");
+						fs.writeFileSync("employees.json", JSON.stringify(that.employees, null, 2));
+						return that.menuAdmin();
+					} else {
+						console.log("Maaf Id tersebut milik admin");
+						return that.remove_record_employee();
+					}
 				}
 			}
 			
