@@ -1,4 +1,3 @@
-const Login = require('./views/login.view');
-// const Dashboard = require('./views/dashboard.view');
+const LoginController = require('./controllers/login.controller');
 
-Login.promptUsername(Login.promptPassword);
+LoginController.promptUsername(LoginController.promptPassword);
