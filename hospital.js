@@ -27,7 +27,7 @@ class Hospital {
 
         rl.question('Please enter your password? \n', (password) => {
 
-          if(this.cekPassword(password)) {
+          if(this.cekPassword(username, password)) {
             this.cekMenu(this.cekPosisi(username))
           }
 
@@ -56,9 +56,9 @@ class Hospital {
     return false
   }
 
-  cekPassword(input) {
+  cekPassword(nama, kunci) {
     for(var i = 0; i < this.dataPegawai.length; i++) {
-      if(this.dataPegawai[i].password == input) {
+      if(this.dataPegawai[i].username == nama && this.dataPegawai[i].password == kunci) {
         return true
       }
     }
@@ -73,7 +73,7 @@ class Hospital {
     }
   }
 
-  cekMenu(input, nama) {
+  cekMenu(input) {
     if(input == 'admin') {
       this.adminMenu()
     }
