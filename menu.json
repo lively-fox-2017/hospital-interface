@@ -1,0 +1,34 @@
+[
+  {
+    "job":"ADMIN" ,
+    "menu" : [
+      "listuser" ,
+      "user" ,
+      "adduser" ,
+      "deleteuser" ,
+      "listpatient" ,
+      "patient" ,
+      "addpatient" ,
+      "deletepatient" ,
+      "logout"
+    ]
+  },
+  {
+    "job":"DOKTER" ,
+    "menu" : [
+      "listpatient" ,
+      "patient" ,
+      "addpatient" ,
+      "deletepatient" ,
+      "logout"
+    ]
+  },
+  {
+    "job":"OB" ,
+    "menu" : [     
+      "logout"
+    ]
+  }
+
+
+]
