@@ -43,7 +43,7 @@ class Hospital {
   static listEmployees() {
     let employees = Hospital.fetch(['employees']);
 
-    return employees;
+    return employees[0];
   }
 
   static readFile() {

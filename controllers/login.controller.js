@@ -3,6 +3,7 @@ const Hospital = require('../models/Hospital');
 const Employee = require('../models/Employee');
 
 const DashboardController = require('./dashboard.controller');
+const ListEmployeesController = require('./list-employees.controller');
 
 const hospitalName = Hospital.fetch(['name']);
 
@@ -81,7 +82,7 @@ class LoginController {
 
         rl.close();
 
-        callback();
+        callback(ListEmployeesController.index);
 
       } else {
 

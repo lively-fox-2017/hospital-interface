@@ -4,6 +4,8 @@ const Hospital = require('../models/Hospital');
 const hospitalName = Hospital.fetch(['name']);
 const loggedInUser = Hospital.getLoggedIn();
 
+const ListEmployeesController = require('./list-employees.controller');
+
 class DashboardController {
 
   static clearScreen() {
@@ -22,7 +24,7 @@ class DashboardController {
 
   }
 
-  static index() {
+  static index(callback) {
 
     let commands = [];
 
@@ -55,7 +57,9 @@ class DashboardController {
 
         switch(command[0]) {
           case 'list_employees':
-            console.log(Hospital.listEmployees());
+            callback(DashboardController.index);
+            break;
+          default:
             break;
         }
 
