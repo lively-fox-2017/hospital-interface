@@ -174,6 +174,7 @@ function doctorMenu() {
         welcomePage();
         break;
       default:
+        rl.write('Invalid Menu');
         menuPage()
         break;
     }
@@ -189,6 +190,7 @@ function obMenu() {
         welcomePage();
         break;
       default:
+        rl.write('Invalid Menu')
         menuPage();
         break;
     }
@@ -199,9 +201,9 @@ function listPatients(cb) {
   var patientList = hospital.showPatientList();
   var table = new Table({
     head: ['Id', 'Name', 'Diagnosis'],
-    colWidths: [10,20,30],
+    colWidths: [10, 20, 30],
   })
-  for(var i =0;i<patientList.length;i++){
+  for (var i = 0; i < patientList.length; i++) {
     var tempArr = []
     tempArr.push(patientList[i].id)
     tempArr.push(patientList[i].name)
@@ -216,7 +218,17 @@ function findPatient(cb) {
   rl.question('Please enter patient id: \n', (id) => {
     var patient = hospital.findPatient(id);
     if (patient != "") {
-      console.log(patient);
+      var table = new Table();
+
+      table.push({
+        'Patient ID': patient.id
+      }, {
+        'Patient Name': patient.name
+      }, {
+        'Patient Diagnosis': patient.diagnosis
+      });
+
+      console.log(table.toString());
     } else {
       console.log('Patient not found');
     }
@@ -260,16 +272,16 @@ function listEmployee(cb) {
   var employeeList = hospital.showEmployeeList();
   var table = new Table({
     head: ['Id', 'Name', 'Position', 'Username', 'Password'],
-    colWidths: [10,20,10,20,20],
+    colWidths: [10, 20, 10, 20, 20],
   })
-  for(var i =0;i<employeeList.length;i++){
+  for (var i = 0; i < employeeList.length; i++) {
     var tempArr = []
     tempArr.push(employeeList[i].id)
     tempArr.push(employeeList[i].name)
     tempArr.push(employeeList[i].position)
     tempArr.push(employeeList[i].username)
     var string = "";
-    for(var j = 0;j<employeeList[i].password.length;j++){
+    for (var j = 0; j < employeeList[i].password.length; j++) {
       string += '*';
     }
     tempArr.push(string);
@@ -281,9 +293,27 @@ function listEmployee(cb) {
 
 function findEmployee(cb) {
   rl.question('Please enter employee id: \n', (id) => {
-    var employee = hospital.findEmployee(id);
-    if (employee != "") {
-      console.log(employee);
+      var employee = hospital.findEmployee(id);
+      if (employee != "") {
+        var string = "";
+        for (let i = 0; i < employee.password.length; i++) {
+          string += '*';
+        }
+        var table = new Table();
+
+        table.push({
+          'Employee ID': employee.id
+        }, {
+          'Employee Name': employee.name
+        }, {
+          'Employee Position': employee.position
+        }, {
+          'Employee Username': employee.username
+        }, {
+          'Employee Password': string
+        });
+
+        console.log(table.toString());
     } else {
       console.log('Employee not found');
     }
@@ -341,25 +371,27 @@ function removeEmployee(cb) {
 }
 
 function hidden(query, callback) {
-    var stdin = process.openStdin();
-    var onDataHandler = function(char) {
-         char = char + "";
-         switch (char) {
-           case "\n": case "\r": case "\u0004":
-             // Remove this handler
-             stdin.removeListener("data",onDataHandler);
-             break;//stdin.pause(); break;
-           default:
-             process.stdout.write("\033[2K\033[200D" + query + Array(rl.line.length+1).join("*"));
-           break;
-         }
-     }
-     process.stdin.on("data", onDataHandler);
+  var stdin = process.openStdin();
+  var onDataHandler = function(char) {
+    char = char + "";
+    switch (char) {
+      case "\n":
+      case "\r":
+      case "\u0004":
+        // Remove this handler
+        stdin.removeListener("data", onDataHandler);
+        break; //stdin.pause(); break;
+      default:
+        process.stdout.write("\033[2K\033[200D" + query + Array(rl.line.length + 1).join("*"));
+        break;
+    }
+  }
+  process.stdin.on("data", onDataHandler);
 
-    rl.question(query, function(value) {
-        rl.history = rl.history.slice(1);
-        callback(value);
-    });
+  rl.question(query, function(value) {
+    rl.history = rl.history.slice(1);
+    callback(value);
+  });
 }
 
 ///Main Process
