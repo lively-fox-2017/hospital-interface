@@ -1,3 +1,5 @@
+'use strict'
+
 class Employee {
   constructor(name, position, username, password) {
     this.name = name
