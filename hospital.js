@@ -9,7 +9,8 @@ class Hospital {
     this.employees = employees
     this.patients = patients
     this.location = location
-    this.tampung = {}
+    this.tampungName = {}
+    this.tampungPosisi = {}
   }
 
   menu() {
@@ -19,26 +20,28 @@ class Hospital {
     console.log('< ************************************************************************ >');
     rl.question('Username: ', (username) => {
       rl.question('Password: ',(password) =>{
+        let user = -1;
         for (var i = 0; i < this.employees.length; i++) {
           if(this.employees[i].username === username && this.employees[i].password === password){
-            switch (this.employees[i].position) {
-              case 'doctor':
-                this.doctor()
-                break;
-              case 'administrator':
-                this.adminroom()
-                break;
-              case 'officeboy':
-                this.ob()
-                break;
-              default:
-                break;
-            }
-          } else if (this.employees.username != username){
-            return 'Username not valid !!';
-          } else if (this.employees.password != password){
-            return 'Password not valid !!';
+            user = i;
+            console.log(`Selamat Datang ${this.employees[i].name}, posisi kamu adalah ${this.employees[i].position}`);
+            break;
           }
+        }
+        if (user > -1) {
+          switch (this.employees[user].position) {
+            case 'administrator':
+              this.adminroom()
+              break;
+            case 'doctor':
+              this.doctor()
+              break;
+            case 'officeboy':
+              this.ob()
+              break;
+          }
+        } else {
+          this.menu();
         }
       })
     })
@@ -56,7 +59,6 @@ class Hospital {
     console.log(`7. Delete Employees `);
     console.log(`8. Exit `);
     console.log('< **************************************************************** >');
-
 
     rl.question('Pilih Menu: ', (opt) => {
       switch (opt) {
@@ -93,22 +95,31 @@ class Hospital {
     console.log(`2. Detail Patients `);
     console.log(`3. Logout `);
     console.log('< ******************************************************************* >');
+    rl.question('Pilih Menu: ', (opt) => {
+      switch (opt) {
+        case '1':
+          this.List_patientsDoctor()
+          break;
+        case '2':
+          this.Details_patientsDoctor()
+          break;
+        case '3':
+          rl.close()
+      }
+    })
   }
 
   ob() {
     console.log('< ****************************OFFICEBOY****************************** >');
     console.log(`1. Log Out `);
     console.log('< ******************************************************************* >');
-  }
-
-  receptionist(){
-    console.log('< **************************RECEPTIONIST***************************** >');
-    console.log(`1. List Patients `);
-    console.log(`2. Detail Patients `);
-    console.log(`3. Add Patients `);
-    console.log(`4. Delete Patients `);
-    console.log(`3. Logout `);
-    console.log('< ******************************************************************* >');
+    rl.question('Pilih Menu: ', (opt) => {
+      switch (opt) {
+        case '1':
+        rl.close()
+        break;
+      }
+    })
   }
 
   List_patients(){
@@ -121,6 +132,35 @@ class Hospital {
       }
     })
   }
+
+  List_patientsDoctor(){
+    console.log(this.patients);
+    rl.question('Kembali (Y/N) ', (opt) => {
+      if (opt == 'Y' || opt == 'y') {
+        this.doctor()
+      } else {
+        this.menu()
+      }
+    })
+  }
+
+  Details_patientsDoctor(){
+    rl.question('Pasien No : ', (input) => {
+      for (var i = 0; i < this.patients.length; i++) {
+        if(this.patients[i].id == input){
+          console.log(this.patients[input-1]);
+            rl.question('Kembali (Y/N) ', (opt) => {
+                if (opt == 'Y' || opt == 'y') {
+                  this.doctor()
+                } else {
+                  this.menu()
+                }
+            })
+        }
+      }
+    })
+  }
+
 
   Details_patients(){
     rl.question('Pasien No : ', (input) => {
@@ -224,6 +264,7 @@ class Hospital {
       }
     })
   }
+
 
 }
 
