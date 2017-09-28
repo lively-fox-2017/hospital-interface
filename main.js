@@ -2,13 +2,13 @@ const readline = require('readline');
 const Hospital = require('./hospital.js');
 const Table = require('cli-table');
 
-var hospital = new Hospital('Mistic', 'Disini');
-hospital.addAdmin('101', 'Kang Admin', 'admin', 'admin');
-hospital.addDoctor('102', 'Kang doktor', 'doctor', '111');
-hospital.addOb('103', 'Bang ob', 'OB', '222');
-hospital.addPatient('001', 'Pasien 1', 'Sehat');
-hospital.addPatient('002', 'Pasien 2', 'Pura pura sakit');
-
+var hospital = new Hospital();
+// hospital.addAdmin('101', 'Kang Admin', 'admin', 'admin');
+// hospital.addDoctor('102', 'Kang doktor', 'doctor', '111');
+// hospital.addOb('103', 'Bang ob', 'OB', '222');
+// hospital.addPatient('001', 'Pasien 1', 'Sehat');
+// hospital.addPatient('002', 'Pasien 2', 'Pura pura sakit');
+// hospital.save(JSON.stringify(hospital));
 var currentLogin = null;
 
 const rl = readline.createInterface({

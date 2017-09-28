@@ -2,18 +2,28 @@ const Doctor = require('./doctor.js');
 const Patient = require('./patient.js');
 const Admin = require('./admin.js');
 const Ob = require('./ob.js');
+const fs = require('fs');
 
 class Hospital {
-  constructor(name, location) {
-    this.name = name
+  constructor() {
+    this.name = ""
     this.employees = []
     this.patients = []
-    this.location = location
+    this.location = ""
+    this.fillData();
+  }
+  fillData() {
+    var data = JSON.parse(fs.readFileSync('data.json','utf8'));
+    this.name = data.name;
+    this.employees = data.employees;
+    this.patients = data.patients;
+    this.location = data.location;
   }
   addDoctor(id, name, username, password) {
     var newDoctor = new Doctor(id, name, username, password);
     if(this.findEmployee(newDoctor.id) === ""){
       this.employees.push(newDoctor);
+      this.save(JSON.stringify(this));
       return true;
     }
     return false;
@@ -22,6 +32,7 @@ class Hospital {
     var newAdmin = new Admin(id, name, username, password);
     if(this.findEmployee(newAdmin.id) === ""){
       this.employees.push(newAdmin);
+      this.save(JSON.stringify(this));
       return true;
     }
     return false;
@@ -30,6 +41,7 @@ class Hospital {
     var newOb = new Ob(id, name, username, password);
     if(this.findEmployee(newOb.id) === ""){
       this.employees.push(newOb);
+      this.save(JSON.stringify(this));
       return true;
     }
     return false;
@@ -38,6 +50,7 @@ class Hospital {
     var newPatient = new Patient(id, name, diagnosis);
     if(this.findPatient(newPatient.id) === ""){
       this.patients.push(newPatient);
+      this.save(JSON.stringify(this));
       return true;
     }
     return false;
@@ -46,6 +59,7 @@ class Hospital {
     for (var i = 0; i < this.patients.length; i++) {
       if (this.patients[i].id === id.trim()) {
         this.patients.splice(i,1);
+        this.save(JSON.stringify(this));
         return true;
         break;
       }
@@ -56,6 +70,7 @@ class Hospital {
     for (var i = 0; i < this.employees.length; i++) {
       if (this.employees[i].id === id.trim()) {
         this.employees.splice(i,1);
+        this.save(JSON.stringify(this));
         return true;
         break;
       }
@@ -89,7 +104,7 @@ class Hospital {
     return this.employees;
   }
   save(data) {
-
+    fs.writeFileSync('data.json', data);
   }
 }
 
