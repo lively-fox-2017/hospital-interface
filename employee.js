@@ -7,4 +7,13 @@ class Employee {
   }
 }
 
+let ArrEmp = []
+let admin = new Employee('Hary', 'administrator', 'hary', 'hary');
+let dokter = new Employee('Prana', 'doctor', 'prana', 'prana');
+let ob = new Employee('Chandra', 'officeboy', 'candra', 'candra')
+ArrEmp.push(admin)
+ArrEmp.push(dokter)
+ArrEmp.push(ob)
+let Pegawai = ArrEmp
+
 module.exports = Employee
