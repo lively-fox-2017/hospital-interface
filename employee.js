@@ -25,7 +25,7 @@ class Employee {
       }
     }
     let dataDel = JSON.stringify(dataEmployees);
-    fs.writeFileSync('patients.json', dataDel, 'utf8')
+    fs.writeFileSync('employees.json', dataDel, 'utf8')
   }
 
   static showList(){
