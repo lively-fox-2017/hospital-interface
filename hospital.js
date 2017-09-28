@@ -26,6 +26,12 @@ class Hospital {
             user = i;
             console.log(`Selamat Datang ${this.employees[i].name}, posisi kamu adalah ${this.employees[i].position}`);
             break;
+          } else if(this.employees[i].username !== username) {
+            console.log('Username Salah !');
+            break;
+          } else if(this.employees[i].password !== password){
+            console.log('Password Salah !');
+            break;
           }
         }
         if (user > -1) {
@@ -40,7 +46,8 @@ class Hospital {
               this.ob()
               break;
           }
-        } else {
+        }
+        else {
           this.menu();
         }
       })
