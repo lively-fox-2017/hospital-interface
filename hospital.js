@@ -188,7 +188,7 @@ class Hospital {
 		  		case '1' : this.listPatients();break;
 		  		case '2' : this.recordPatients();break;
 		  		case '3' : this.addRecordPatient();break;
-		  		case '4' : this.login();break;
+		  		case '4' : this.removePatient();break;
 		  		case '5' : this.login();break;
 		  	}	
 			})
@@ -243,6 +243,30 @@ class Hospital {
 			});	
 		});
 
+	}
+
+	// doctor page : remove record patients
+	static removePatient(){
+		for(let i = 0; i<strPatient.length; i++){
+			console.log(`${strPatient[i].id}. Name: ${strPatient[i].name}`)
+  	}		
+
+		rl.question('Number Id delete : ', (answer) => {
+			
+  		let forDelete = strPatient.splice((answer-1))
+  		console.log(forDelete.name)
+			let deleted = JSON.stringify(strPatient)
+
+			fs.writeFile('data_patient.json', deleted,(err, saved)=>{
+				if(err){
+					console.log('failed to delete your Patient')
+				}else{
+					console.log(`Deleted from your data Patient...`)
+					this.doctorPage()
+				}
+			})
+
+		});
 	}
 
 
