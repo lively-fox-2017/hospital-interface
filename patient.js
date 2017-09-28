@@ -1,3 +1,4 @@
+
 class Patient {
   constructor(id, name, diagnosis) {
     this.id = id
