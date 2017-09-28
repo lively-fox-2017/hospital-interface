@@ -60,6 +60,7 @@ class Hospital {
     rl.question('Please enter your password : ', (password) => {
       if (password == user.password) {
         this.activeUser.push(user)
+
         console.log(`Welcome, ${user.name}. Your level access is : ${user.position}`);
         console.log('===============================================');
         this.showMenu(user)
@@ -79,6 +80,7 @@ class Hospital {
   showMenu(user){
     let menuAccess = this.dataMenu()
     let menuUser = menuAccess.filter((a)=>a.job==user.position)
+
     for (let i=0 ;i<menuUser[0].menu.length ; i++){
       let menu=''
       switch (menuUser[0].menu[i]) {
@@ -163,9 +165,13 @@ class Hospital {
   }
 
   adduserMenu(user){
-    rl.question('Name : ' , (name)=>{
-      rl.question('Position : ', (position)=>{
-        rl.question('Username : ', (username)=>{
+    rl.question('Username : ' , (username)=>{
+      if(this.getUsername(username)!=''){
+        console.log('Oopss...User already exist');
+        this.showMenu(user)
+      }
+      rl.question('name : ', (name)=>{
+        rl.question('Position : ', (position)=>{
           rl.question('Password : ' , (password)=>{
             let employee = new Employee(name,position,username,password)
             this.employees.push(employee)
@@ -179,7 +185,10 @@ class Hospital {
   deleteuserMenu(user){
     rl.question('Input USERNAME : ', (input)=>{
       let username=this.getUsername(input)
-      if (username!=''){
+      if(username==user){
+        console.log('Oops...you cant delete yourself');
+        this.showMenu(user)
+      }else if (username!=''){
         for(let i=0; i<this.employees.length; i++){
           if(this.employees[i].username== input){
             this.employees.splice(i,1)
@@ -223,6 +232,10 @@ class Hospital {
 
   addpatientMenu(user){
     rl.question('id : ' , (id)=>{
+      if(this.getPatientID(id)!=''){
+        console.log('Ops..Patiend ID already exist');
+        this.showMenu(user)
+      }
       rl.question('name : ', (name)=>{
         rl.question('diagnosis : ', (diagnosis)=>{
             let patient = new Patient(id,name,diagnosis)
