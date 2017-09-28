@@ -1,10 +1,4 @@
-class Hospital {
-  constructor(name, location, employees, patients) {
-    this.name = name
-    this.employees = employees
-    this.patients = patients
-    this.location = location
-  }
-}
+const Login = require('./views/login.view');
+// const Dashboard = require('./views/dashboard.view');
 
-module.exports = Hospital
+Login.promptUsername(Login.promptPassword);
