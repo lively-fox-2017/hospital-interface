@@ -1,10 +1,22 @@
+"use strict"
+
+var hospital = require('./hospital')
+
 class Employee {
-  constructor(name, position, username, password) {
-    this.name = name
-    this.position = position
+  constructor(id, username, password, position) {
+    this.id = id,
     this.username = username
     this.password = password
+    this.position = position
   }
+
+
+
+
+
 }
+
+// let employee = new Employee()
+
 
 module.exports = Employee
