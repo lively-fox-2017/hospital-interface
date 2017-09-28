@@ -26,31 +26,41 @@ class Hospital {
 
   login() {
     rl.question('Insert your username:\n', (answer) => {
-      if (answer == 'admin') {
-        this.user = 'admin'
-        this.password()
-      } else if (answer == 'doctor') {
-        this.user = 'doctor'
-        this.password()
-      } else if (answer == 'ob') {
-        this.user = 'ob'
-        this.password()
-      } else if (answer == 'quit') {
+      let user = ''
+      if (answer == 'quit'){
         rl.close()
       } else {
-        this.home()
+        for (let i = 0; i < employeeArr.length; i++) {
+          if (answer == employeeArr[i].username) {
+            user = employeeArr[i].username;
+          }
+        }
+        if (user.length>0){
+          this.user = answer
+          this.password()
+        } else {
+          this.login()
+        }
       }
     })
   }
 
   password() {
     rl.question('Insert your password:\n', (answer) => {
-      if (answer === 'admin' && this.user === 'admin') {
-        this.adminOptions()
-      } else if (answer === 'doctor' && this.user === 'doctor') {
-        this.doctorOptions()
-      } else if (answer === 'ob' && this.user === 'ob') {
-        this.obOptions()
+      let position = ''
+      for (let i = 0; i < employeeArr.length; i++) {
+        if (answer == employeeArr[i].password && this.user == employeeArr[i].username) {
+          position = employeeArr[i].position;
+        }
+      }
+      if (position.length > 0 ){
+        if (position == 'Admin') {
+          this.adminOptions()
+        } else if (position == 'Doctor') {
+          this.doctorOptions()
+        } else if (position == 'OB') {
+          this.obOptions()
+        }
       } else {
         this.login()
       }
