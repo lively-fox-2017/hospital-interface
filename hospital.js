@@ -18,7 +18,7 @@ class Hospital {
   }
 
   login() {
-    rl.question('Welcome to ' + this.name + ' Hospital \n' + '-------------------------\n' + 'Please enter your Username:\n', (name) => {
+    rl.question('--Welcome to ' + this.name + ' Hospital-- \n' + '------' + this.location + '------\n' + 'Please enter your Username:\n', (name) => {
       rl.question('Please enter password: \n> ', (password) => {
         for (let i = 0; i < this.employees.length; i++) {
           if (this.employees[i].name === name && this.employees[i].password === password) {
@@ -33,13 +33,14 @@ class Hospital {
             if (this.employees[i].position === 'OB') {
               return hospital.obMenu();
             }
+            if (this.employees[i].position === 'pasien') {
+              return hospital.patientMenu();
+            }
+            return hospital.inputSalah();
           }
         }
-        return hospital.inputSalah();
       })
     })
-
-
   }
 
   obMenu() {
@@ -48,13 +49,28 @@ class Hospital {
       if (answer === '1') {
         console.log('kerja dulu donk');
       } else {
+        console.log('Please input number only press 0 for back');
+        return hospital.login();
+      }
+    })
+  }
+
+  patientMenu() {
+    console.log('> ----------------------------------------\n> Welcome, Your access level is: USER\n> ----------------------------------------');
+    console.log('1. view_record <patient_id> ');
+    console.log('FOR EXIT (press ctrl + c)');
+    rl.question('What would you like to do?  ', (answer) => {
+      if (answer === '1') {
+        console.log('view_record pasien');
+        return hospital.get_patient();
+      } else {
         console.log('Please input number only');
       }
     })
   }
 
   adminMenu() {
-    console.log('> -------------------------\n> Welcome ' + adminName + ' Your access level is: ADMIN\n> -------------------------');
+    console.log('> ----------------------------------------\n> Welcome ' + adminName + ' Your access level is: ADMIN\n> ----------------------------------------');
     console.log('1. list_employee');
     console.log('2. list_patient');
     console.log('3. view_record <employee_id> ');
@@ -63,6 +79,7 @@ class Hospital {
     console.log('6. add_record <patient_id> ');
     console.log('7. remove_record employee');
     console.log('8. remove_record patient');
+    console.log('9. add_user for patient');
     console.log('FOR EXIT (press ctrl + c)');
 
     rl.question('What would you like to do?  ', (answer) => {
@@ -74,9 +91,10 @@ class Hospital {
         return hospital.list_patients();
       } else if (answer === '3') {
         console.log('view_record karyawan');
+        return hospital.get_employee();
       } else if (answer === '4') {
         console.log('view_record pasien');
-        return hospital.list_patients();
+        return hospital.get_patient();
       } else if (answer === '5') {
         console.log('add_record karyawan');
         return hospital.add_employee();
@@ -85,9 +103,13 @@ class Hospital {
         return hospital.add_patient();
       } else if (answer === '7') {
         console.log('remove_record');
+        return hospital.remove_employee();
       } else if (answer === '8') {
         console.log('remove_record patient');
         return hospital.remove_patients();
+      } else if (answer === '9') {
+        console.log('add user');
+        return hospital.add_user();
       } else {
         console.log('Please input number only');
       }
@@ -102,7 +124,7 @@ class Hospital {
         return hospital.list_patients();
       } else if (answer === '2') {
         console.log('view_record');
-        return hospital.list_patients();
+        return hospital.get_patient();
       } else if (answer === '3') {
         console.log('add_record');
         return hospital.add_patient();
@@ -117,7 +139,10 @@ class Hospital {
   }
 
   list_employee() {
-    console.log(this.employees);
+    let content = fs.readFileSync('dataemployees.json', 'utf8');
+    let objContent = JSON.parse(content);
+    // console.log(this.employees);
+    console.log(objContent);
     rl.question('What would you like to do? press 0 for back ', (answer) => {
       if (answer === '0') {
         return hospital.adminMenu();
@@ -126,10 +151,70 @@ class Hospital {
   }
 
   list_patients() {
-    console.log(this.patients);
+    let content2 = fs.readFileSync('datapatient.json');
+    let objContent2 = JSON.parse(content2);
+    // console.log(this.patients);
+    console.log(objContent2);
     rl.question('What would you like to do? press 0 for back ', (answer) => {
       if (answer === '0') {
         return hospital.doctorMenu();
+      }
+    })
+  }
+
+  get_patient() {
+    let content2 = fs.readFileSync('datapatient.json');
+    let objContent2 = JSON.parse(content2);
+    rl.question('input nama / id yang mau dilihat, ', (answer) => {
+      for (var i=0; i<objContent2.length; i++){
+        if (objContent2[i].name == answer || objContent2[i].id == answer){
+          console.log(objContent2[i]);
+          rl.question('What would you like to do? press 0 for back ', (answer) => {
+            if (answer === '0') {
+              return hospital.doctorMenu();
+            }
+          })
+        }
+      }
+    })
+  }
+
+  get_employee() {
+    let content = fs.readFileSync('dataemployees.json', 'utf8');
+    let objContent = JSON.parse(content);
+    rl.question('input nama yang mau dilihat, ', (answer) => {
+      for (var i=0; i<objContent.length; i++){
+        if (objContent[i].name == answer){
+          console.log(objContent[i]);
+          rl.question('What would you like to do? press 0 for back ', (answer) => {
+            if (answer === '0') {
+              return hospital.doctorMenu();
+            }
+          })
+        }
+      }
+    })
+  }
+
+  remove_employee() {
+    let space = [];
+    let content2 = fs.readFileSync('datapatient.json');
+    let objContent2 = JSON.parse(content2);
+    // console.log(this.employees);
+    console.log(objContent);
+    rl.question('masukan nama yang mau dihapus, ', (answer) => {
+      for (var i = 0; i < this.employees.length; i++) {
+        if (answer != this.employees[i].name) {
+          space.push(this.employees[i]);
+          let simpan = JSON.stringify(space);
+          fs.writeFile('dataemployees.json', simpan, (err, tersimpan) => {
+            if (err) {
+              console.log('data tidak tersimpan');
+            } else {
+              return hospital.adminMenu();
+            }
+          })
+        }
       }
     })
   }
@@ -152,6 +237,27 @@ class Hospital {
           })
         }
       }
+    })
+  }
+
+  add_user() {
+    rl.question('Please add user name:\n', (name) => {
+      rl.question('Please add user position: \n> ', (position) => {
+        rl.question('Please add user username: \n> ', (username) => {
+          rl.question('Please add user password: \n> ', (password) => {
+            let inputUser = new Employee(name, position, username, password);
+            this.employees.push(inputUser);
+            let save = JSON.stringify(this.employees);
+            fs.writeFile('dataemployees.json', save, (err, tersimpan) => {
+              if (err) {
+                console.log('data tidak tersimpan');
+              } else {
+                return hospital.login();
+              }
+            })
+          })
+        })
+      })
     })
   }
 
@@ -221,7 +327,7 @@ rl.on('close', () => {
 
 
 let content2 = fs.readFileSync('datapatient.json');
-// let objContent2 = JSON.parse(content2);
+let objContent2 = JSON.parse(content2);
 let arr_patient = [];
 let patient1 = new Patient('001', 'Sukma', 'Pusing');
 arr_patient.push(patient1);
@@ -229,7 +335,7 @@ let patient2 = new Patient('002', 'Melati', 'Vertigo');
 arr_patient.push(patient2);
 // fs.writeFile('datapatient.json', JSON.stringify(arr_patient), 'utf-8');
 // console.log(arr_patient);
-let hospital = new Hospital('RS.ABC', 'jakarta', arr_employees, arr_patient);
+let hospital = new Hospital('ABC', 'Jakarta Selatan', arr_employees, arr_patient);
 let doctorName;
 let adminName;
 let obName;
