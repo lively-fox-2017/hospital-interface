@@ -1,5 +1,5 @@
 const Employee = require('./employee')
-const Patients = require('./patient')
+const Patient = require('./patient')
 var Table = require('cli-table2');
  
 // /* instantiate cli table */
@@ -185,15 +185,68 @@ class Hospital {
 		console.log('\nOptions:\n1. list_patients\n2. view_records <patient_id>\n3. add_record <patient_id>\n4. remove_record <patient_id> <record_id>\n5. logout\n')
 		rl.question(`What would you like to do? `, (answer) => {
 		  	switch(answer){
-		  		case '1' : this.login();break;
-		  		case '2' : this.login();break;
-		  		case '3' : this.login();break;
+		  		case '1' : this.listPatients();break;
+		  		case '2' : this.recordPatients();break;
+		  		case '3' : this.addRecordPatient();break;
 		  		case '4' : this.login();break;
 		  		case '5' : this.login();break;
 		  	}	
 			})
 	}
 
+
+	// doctor page : list patients
+	static listPatients(){
+		for(let i = 0; i<strPatient.length; i++){
+			console.log(`${i+1}. Name: ${strPatient[i].name}`)
+  	}
+  	this.doctorPage()
+	}
+
+	// doctor page : record patients
+	static recordPatients(){
+		for(let i = 0; i<strPatient.length; i++){
+			console.log(`${strPatient[i].id}. Name: ${strPatient[i].name}`)
+  	}
+
+		rl.question('Detail Patient by ID ', (search_id) => {
+		  	for (var i = 0; i < strPatient.length; i++) {
+		  		if(search_id === strPatient[i].id){
+		  			console.log(`Id: ${strPatient[i].id}. Name: ${strPatient[i].name} | Diagnosa: ${strPatient[i].diagnosa}`)
+			  	}
+		  	}
+	  	this.doctorPage()
+		})
+
+	}
+
+	// doctor page : add record patients
+	static addRecordPatient(){
+		rl.question('Id: ', (id) => {
+	  		rl.question('Name: ', (name) => {
+		  		rl.question('Diagnosis: ', (diagnosis) => {
+		  		
+		  		let addListPatient = new Patient(id, name, diagnosis)
+		  		strPatient.push(addListPatient)
+		  		let save = JSON.stringify(strPatient)
+		  
+		  		fs.writeFile('data_patient.json', save,(err, saved)=>{
+						if(err){
+							console.log(`data "${name}" not save`)
+						}else{
+							console.log(`Added "${name}" to data patient...`)
+							this.doctorPage()
+						}
+					})
+
+				});
+			});	
+		});
+
+	}
+
+
+	// * office boy page *
 	static officeBoyPage(name){
 		console.log(`-------------------------------------------\nWelcome, ${Employee.yourNameIs(name)}. Your access level is: OFFICE BOY\n-------------------------------------------`)
 		console.log(`\nOptions:\n1. logout\n`)
@@ -202,7 +255,6 @@ class Hospital {
 		  		case '1' : this.login();break;
 		  	}	
 			})
-		
 	}
 
   

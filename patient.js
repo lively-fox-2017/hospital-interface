@@ -11,7 +11,11 @@ class Patient {
     this.name = name
     this.diagnosis = diagnosis
   }
+
+
 }
 
+
+//Patient.searchById(search_id)
+
 module.exports = Patient
-//module.exports = Hospital
