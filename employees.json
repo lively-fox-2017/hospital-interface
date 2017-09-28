@@ -1,0 +1,34 @@
+[
+    {
+        "id": 1,
+        "name": "Administrator",
+        "position": "admin",
+        "username": "admin",
+        "password": "admin",
+        "createdBy": null
+    },
+    {
+        "id": 3,
+        "name": "Dr. Boyke",
+        "position": "doctor",
+        "username": "boyke",
+        "password": "admin",
+        "createdBy": 1
+    },
+    {
+        "id": 5,
+        "name": "Sayuti",
+        "position": "officeboy",
+        "username": "sayuti",
+        "password": "admin",
+        "createdBy": 1
+    },
+    {
+        "id": 7,
+        "name": "siapalagi",
+        "position": "receptionist",
+        "username": "siapalagi",
+        "password": "mekdi",
+        "createdBy": 1
+    }
+]
