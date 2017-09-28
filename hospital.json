@@ -11,10 +11,17 @@
 			},
 			{
 				"id": 2,
-				"name": "Alexei Wahyudiputra",
-				"level": "admin",
+				"name": "Alexei",
+				"level": "doctor",
 				"username": "alexei",
-				"password": "iexela"
+				"password": "alexei"
+			},
+			{
+				"id": 3,
+				"name": "Sergei",
+				"level": "ob",
+				"username": "sergei",
+				"password": "sergei"
 			}
 		],
 		"patients": [],

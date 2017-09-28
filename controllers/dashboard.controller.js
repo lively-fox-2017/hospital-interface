@@ -1,14 +1,23 @@
 const readline = require('readline');
 
 const Hospital = require('../models/Hospital');
-const hospitalName = Hospital.fetch(['name']);
-const loggedInUser = Hospital.getLoggedIn();
+
+const LoginController = require('./login.controller.js');
 
 const ListEmployeesController = require('./list-employees.controller');
+const ListPatientsController = require('./list-patients.controller');
+const ViewEmployeeController = require('./view-employee.controller');
+const ViewPatientController = require('./view-patient.controller');
+const AddEmployeeController = require('./add-employee.controller');
+const AddPatientController = require('./add-patient.controller');
+const RemoveEmployeeController = require('./remove-employee.controller');
+const RemovePatientController = require('./remove-patient.controller');
 
 class DashboardController {
 
   static clearScreen() {
+
+    const loggedInUser = Hospital.getLoggedIn();
 
     process.stdout.write("\x1Bc")
     console.log(`--------------------------------------------`);
@@ -20,17 +29,31 @@ class DashboardController {
       case 'admin':
         console.log(Hospital.getAdminMenu());
         break;
+      case 'doctor':
+        console.log(Hospital.getDoctorMenu());
+        break;
+      case 'ob':
+        console.log(Hospital.getOBMenu());
+        break;
     }
 
   }
 
-  static index(callback) {
+  static index() {
+
+    const loggedInUser = Hospital.getLoggedIn();
 
     let commands = [];
 
     switch (loggedInUser.level) {
       case 'admin':
         commands = Hospital.getAdminCommands();
+        break;
+      case 'doctor':
+        commands = Hospital.getDoctorCommands();
+        break;
+      case 'ob':
+        commands = Hospital.getOBCommands();
         break;
     }
 
@@ -57,7 +80,31 @@ class DashboardController {
 
         switch(command[0]) {
           case 'list_employees':
-            callback(DashboardController.index);
+            ListEmployeesController.index(DashboardController.index);
+            break;
+          case 'list_patients':
+            ListPatientsController.index(DashboardController.index);
+            break;
+          case 'view_employee':
+            ViewEmployeeController.index(parseInt(command[1]) || '', DashboardController.index);
+            break;
+          case 'view_patient':
+            ViewPatientController.index(parseInt(command[1]) || '', DashboardController.index);
+            break;
+          case 'add_employee':
+            AddEmployeeController.index(DashboardController.index);
+            break;
+          case 'add_patient':
+            AddPatientController.index(DashboardController.index);
+            break;
+          case 'remove_employee':
+            RemoveEmployeeController.index(parseInt(command[1]) || '', DashboardController.index);
+            break;
+          case 'remove_patient':
+            RemovePatientController.index(parseInt(command[1]) || '', DashboardController.index);
+            break;
+          case 'logout':
+            rl.close();
             break;
           default:
             break;

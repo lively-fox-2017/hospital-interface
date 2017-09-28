@@ -4,27 +4,27 @@ const Hospital = require('../models/Hospital');
 
 const DashboardController = require('./dashboard.controller');
 
-class ListEmployeesController {
+class ListPatientsController {
 
   static clearScreen() {
 
     process.stdout.write("\x1Bc")
     console.log(`-------------`);
-    console.log(`Employee List`);
+    console.log(`Patients List`);
     console.log(`-------------`);
 
   }
 
   static index(callback) {
 
-    const employees = Hospital.listEmployees();
+    const patients = Hospital.listPatients();
 
     const rl = readline.createInterface({
       input: process.stdin,
       output: process.stdout
     });
 
-    ListEmployeesController.clearScreen();
+    ListPatientsController.clearScreen();
 
     rl.setPrompt('');
     rl.prompt();
@@ -39,13 +39,12 @@ class ListEmployeesController {
 
     let output = '';
 
-    // Log employees
-    for (let i = 0; i < employees.length; i++) {
+    // Log patients
+    for (let i = 0; i < patients.length; i++) {
 
-      output += 'ID: ' + employees[i].id + '\n';
-      output += 'Name: ' + employees[i].name + '\n';
-      output += 'Level: ' + employees[i].level + '\n';
-      output += 'Username: ' + employees[i].username + '\n';
+      output += 'ID: ' + patients[i].id + '\n';
+      output += 'Name: ' + patients[i].name + '\n';
+      output += 'Diagnosis: ' + patients[i].diagnosis + '\n';
 
       output += '\n';
 
@@ -59,4 +58,4 @@ class ListEmployeesController {
 
 }
 
-module.exports = ListEmployeesController;
+module.exports = ListPatientsController;

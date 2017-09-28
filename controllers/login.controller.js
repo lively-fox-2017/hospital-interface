@@ -18,7 +18,7 @@ class LoginController {
 
   }
 
-  static promptUsername(callback) {
+  static promptUsername() {
 
     const rl = readline.createInterface({
       input: process.stdin,
@@ -44,9 +44,7 @@ class LoginController {
 
         rl.close();
 
-        Hospital.setLoggedIn(employee);
-
-        callback(employee, DashboardController.index);
+        LoginController.promptPassword(employee);
 
       } else {
 
@@ -60,7 +58,7 @@ class LoginController {
 
   }
 
-  static promptPassword(employee, callback) {
+  static promptPassword(employee) {
 
     const rl = readline.createInterface({
       input: process.stdin,
@@ -82,7 +80,9 @@ class LoginController {
 
         rl.close();
 
-        callback(ListEmployeesController.index);
+        Hospital.setLoggedIn(employee);
+
+        DashboardController.index();
 
       } else {
 

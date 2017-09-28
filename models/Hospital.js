@@ -1,12 +1,6 @@
 const fs = require('fs');
 
 class Hospital {
-  constructor(obj) {
-    this._name = obj.name;
-    this._employees = obj.employees;
-    this._patients = obj.patients;
-    this._location = obj.location;
-  }
 
   static setLoggedIn(employee) {
 
@@ -28,22 +22,58 @@ class Hospital {
 
   static getAdminMenu() {
 
-    return '- list_employees\n- list_patients\n- view_employee <employee_id>\n- view_patient <patient_id>\n- remove_employee <employee_id>\n- remove_patient <patient_id>';
+    return '- list_employees\n- list_patients\n- view_employee <employee_id>\n- view_patient <patient_id>\n- add_employee\n- add_patient\n- remove_employee <employee_id>\n- remove_patient <patient_id>\n- logout';
 
   }
 
+  static getDoctorMenu() {
+
+    return 'list_patients\n- view_patient <patient_id>\n- add_patient\n- remove_patient <patient_id>\n- logout';
+
+  }
+
+  static getOBMenu() {
+    return '- logout';
+  }
+
   static getAdminCommands() {
+
     return [
       'list_employees', 'list_patients',
       'view_employee', 'view_patient',
-      'remove_employee', 'remove_patient'
+      'add_employee', 'add_patient',
+      'remove_employee', 'remove_patient',
+      'logout'
     ];
+
+  }
+
+  static getDoctorCommands() {
+
+    return [
+      'list_patients', 'view_patient',
+      'add_patient', 'remove_patient',
+      'logout'
+    ];
+
+  }
+
+  static getOBCommands() {
+
+    return ['logout'];
+
   }
 
   static listEmployees() {
     let employees = Hospital.fetch(['employees']);
 
     return employees[0];
+  }
+
+  static listPatients() {
+    let patients = Hospital.fetch(['patients']);
+
+    return patients[0];
   }
 
   static readFile() {
@@ -57,6 +87,14 @@ class Hospital {
     let hospital = this.readFile();
 
     return JSON.parse(hospital)[0].employees;
+
+  }
+
+  static fetchPatients() {
+
+    let hospital = this.readFile();
+
+    return JSON.parse(hospital)[0].patients;
 
   }
 
@@ -76,6 +114,28 @@ class Hospital {
     }
 
     return fetchResult;
+
+  }
+
+  static getEmployeeLastId() {
+
+    let employees = JSON.parse(this.readFile())[0].employees;
+
+    if (employees.length)
+      return employees[employees.length - 1].id;
+
+    return 0;
+
+  }
+
+  static getPatientLastId() {
+
+    let patients = JSON.parse(this.readFile())[0].patients;
+
+    if (patients.length)
+      return patients[patients.length - 1].id;
+
+    return 0;
 
   }
 }

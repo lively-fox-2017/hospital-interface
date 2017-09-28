@@ -3,7 +3,7 @@ const Hospital = require('./Hospital');
 
 class Employee {
   constructor(obj) {
-    this.id       = obj.id;
+    this.id       = obj.id || 0;
     this.name     = obj.name;
     this.level    = obj.level;
     this.username = obj.username;
@@ -58,9 +58,34 @@ class Employee {
 
   save() {
 
+    let hospital = JSON.parse(Hospital.readFile());
+
+    let lastId = Hospital.getEmployeeLastId();
+
+    this.id = lastId + 1;
+
+    hospital[0].employees.push(this);
+
+    fs.writeFileSync('hospital.json', JSON.stringify(hospital, null, '\t'));
+
   }
 
-  destroy(employeeId) {
+  static destroy(employeeId) {
+
+    let hospital = JSON.parse(Hospital.readFile());
+
+    for (let i = 0; i < hospital[0].employees.length; i++) {
+
+      if (hospital[0].employees[i].id === employeeId) {
+
+        hospital[0].employees.splice(i, 1);
+        break;
+
+      }
+
+    }
+
+    fs.writeFileSync('hospital.json', JSON.stringify(hospital, null, '\t'));
 
   }
 }
