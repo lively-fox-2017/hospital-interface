@@ -3,7 +3,7 @@ const Hospital = require('./hospital')
 // /* import data employee */
 let fs = require('fs')
 let data = JSON.parse(fs.readFileSync('data_employee.json'))
-//console.log(data)
+
 
 class Employee {
   constructor(name, position, username, password) {
