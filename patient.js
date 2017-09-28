@@ -3,7 +3,7 @@ class Patient {
     this.id = id
     this.name = name
     this.diagnosis = diagnosis
-  }
+  }  
 }
 
 module.exports = Patient
