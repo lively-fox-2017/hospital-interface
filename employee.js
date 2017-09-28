@@ -1,5 +1,6 @@
 class Employee {
-  constructor(name, position, username, password) {
+  constructor(id, name, position, username, password) {
+    this.id = id
     this.name = name
     this.position = position
     this.username = username
@@ -7,13 +8,6 @@ class Employee {
   }
 }
 
-let ArrEmp = []
-let admin = new Employee('Hary', 'administrator', 'hary', 'hary');
-let dokter = new Employee('Prana', 'doctor', 'prana', 'prana');
-let ob = new Employee('Chandra', 'officeboy', 'candra', 'candra')
-ArrEmp.push(admin)
-ArrEmp.push(dokter)
-ArrEmp.push(ob)
-let Pegawai = ArrEmp
+
 
 module.exports = Employee

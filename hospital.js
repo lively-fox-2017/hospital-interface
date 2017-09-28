@@ -124,21 +124,24 @@ class Hospital {
 
   Details_patients(){
     rl.question('Pasien No : ', (input) => {
-      console.log(this.patients[input-1]);
-
-      rl.question('Kembali (Y/N) ', (opt) => {
-        if (opt == 'Y' || opt == 'y') {
-          this.adminroom()
-        } else {
-          this.menu()
+      for (var i = 0; i < this.patients.length; i++) {
+        if(this.patients[i].id == input){
+          console.log(this.patients[input-1]);
+            rl.question('Kembali (Y/N) ', (opt) => {
+                if (opt == 'Y' || opt == 'y') {
+                  this.adminroom()
+                } else {
+                  this.menu()
+                }
+            })
         }
-      })
+      }
     })
   }
 
   Add_patients(){
-    rl.question('Nama : ', (nama)=>{
-      rl.question('Diagnosis : ', (diagnosis)=>{
+    rl.question('Nama Patients: ', (nama)=>{
+      rl.question('Diagnosis Patients: ', (diagnosis)=>{
         let no_urut = this.patients[this.patients.length-1].id + 1
         let id = no_urut + 1
         let newPasien = new Patient(no_urut,nama,diagnosis)
@@ -155,7 +158,23 @@ class Hospital {
     })
   }
 
-  Delete_patients(){}
+  Delete_patients(){
+    rl.question('ID Patients : ', (input) => {
+      for (var i = 0; i < this.patients.length; i++) {
+        if(this.patients[i].id == input){
+          let hapus = this.patients.splice(input-1,1)
+        }
+        rl.question('Kembali (Y/N) ', (opt) => {
+          if (opt == 'Y' || opt == 'y') {
+            this.adminroom()
+          } else {
+            this.menu()
+          }
+        })
+      }
+    })
+  }
+
   List_employees(){
     console.log(this.employees);
     rl.question('Kembali (Y/N) ', (opt) => {
@@ -166,24 +185,61 @@ class Hospital {
       }
     })
   }
-  Add_employees(){}
-  Delete_employees(){}
+
+  Add_employees(){
+    let no_urut = this.employees[this.employees.length-1].id + 1
+    let id = no_urut
+    rl.question('Nama Pegawai Baru : ', (nama)=>{
+      rl.question('Posisi : ', (position)=>{
+        rl.question('New Username : ', (newUsername)=>{
+          rl.question('New Password : ', (newPassword)=>{
+            let employees = new Employee(id,nama,position,newUsername,newPassword)
+            this.employees.push(employees)
+            rl.question('Kembali (Y/N) ', (opt) => {
+              if (opt == 'Y' || opt == 'y') {
+                this.adminroom()
+              } else {
+                this.menu()
+              }
+            })
+          })
+        })
+      })
+    })
+  }
+
+  Delete_employees(){
+    rl.question('ID Pegawai : ', (input) => {
+      for (var i = 0; i < this.employees.length; i++) {
+        if(this.employees[i].id == input){
+          let hapus = this.employees.splice(input-1,1)
+        }
+        rl.question('Kembali (Y/N) ', (opt) => {
+          if (opt == 'Y' || opt == 'y') {
+            this.adminroom()
+          } else {
+            this.menu()
+          }
+        })
+      }
+    })
+  }
 
 }
 
 let ArrEmp = []
-let admin = new Employee('Hary', 'administrator', 'hary', 'hary');
-let dokter = new Employee('Prana', 'doctor', 'prana', 'prana');
-let ob = new Employee('Chandra', 'officeboy', 'candra', 'candra')
+let admin = new Employee(1,'Hary', 'administrator', 'hary', 'hary');
+let dokter = new Employee(2,'Prana', 'doctor', 'prana', 'prana');
+let ob = new Employee(3,'Chandra', 'officeboy', 'candra', 'candra')
 ArrEmp.push(admin)
 ArrEmp.push(dokter)
 ArrEmp.push(ob)
 let Pegawai = ArrEmp
 // id, name, diagnosis
 let ArrPas = []
-let pasien1 = new Patient(1, 'Ryan', 'Batuk');
-let pasien2 = new Patient(2, 'Icha', 'Pusing');
-let pasien3 = new Patient(3, 'Windy', 'Pilek')
+let pasien1 = new Patient(1, 'Ryan Andriawan', 'Batuk');
+let pasien2 = new Patient(2, 'Icha Mahesa', 'Pusing');
+let pasien3 = new Patient(3, 'Winnie The Pooh', 'Demam')
 ArrPas.push(pasien1)
 ArrPas.push(pasien2)
 ArrPas.push(pasien3)
