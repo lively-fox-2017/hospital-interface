@@ -152,9 +152,13 @@ class Hospital {
       rl.question('Masukkan id yang akan di hapus', (id)=>{
         let tampungHapus=[];
         stringAdmin.forEach((hapus)=> {
-          if(id!==hapus.id){
+          // console.log(id === hapus.id && hapus.position === 'Admin');
+          if(id === hapus.id && hapus.position === 'Admin'){
+            return 'Admin tidak bisa di hapus \n'+ this.dataInduk();
+          } else if(id!==hapus.id){
+            // console.log(hapus);
             tampungHapus.push(hapus);
-          }
+          } 
         }, this);
         let simpan = JSON.stringify(tampungHapus);
         fs.writeFile('admin.json', simpan, (err, tersimpan) => {
