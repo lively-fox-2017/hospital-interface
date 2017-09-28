@@ -1,0 +1,12 @@
+[
+    {
+        "id": 2,
+        "name": "namamu",
+        "diagnosis": [
+            "bisul",
+            "kadas",
+            "kurap"
+        ],
+        "doctor": 1
+    }
+]
