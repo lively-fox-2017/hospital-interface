@@ -1,7 +1,8 @@
 class Patient {
-  constructor(id, name, diagnosis) {
+  constructor(id, name, age, diagnosis) {
     this.id = id
     this.name = name
+    this.age = age
     this.diagnosis = diagnosis
   }
 }
