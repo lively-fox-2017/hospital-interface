@@ -21,37 +21,29 @@ class Hospital {
 
   static login(){
 
+  	rl.question('\nWelcome to Mistic Hospital\n-----------------------------\nPlease enter your username:\n', (input_username) => {
+	  	// TODO: Log the answer in a JSON
+	 		rl.question('Please enter your password:\n', (input_pass) => {
+	 			// console.log('______________________' + input_pass)
+	 			// console.log('````````````````````````' + Employee.auth_passWord(input_pass))
+		  	if(input_username === Employee.auth_userName(input_username) && input_pass === Employee.auth_passWord(input_pass)){
+		  		console.log('berhasil')
+		  		switch(Employee.auth_position(input_username)){
+		  			case 'admin' 			: console.log('==*=admin');break;
+		  			case 'doctor' 		: console.log('=*=doctor');break;
+		  			case 'office boy' : console.log('=office boy*');break;
+		  		}
+		  	}else{
+		  		console.log(`wrong username or password`) 
+		  		return this.login()
+		  	}	
+		  })
+		})	
+	}
 
-  	rl.question('\nWelcome to Mistic Hospital\n-----------------------------\nPlease enter your username:\n', (answer) => {
-	  	// TODO: Log the answer in a database
-
-	  	if(answer === Employee.auth_userName(answer)){
-
-
-	  		rl.question('Please enter your password:\n', (input_pass) => {
-	  			//console.log(typeof(input_pass))
-
-	  		if(Employee.auth_passWord(input_pass) === input_pass){
-
-	  			console.log(`password valid`)
-
-	  		}else{
-
-	  			return this.login()
-	  		}
-
-			})
-
-	  	}else{
-	  		console.log(`username not valid`)
-	  	}
-
-		})
-
-		
+  
 
 
-  }
 
 }
 

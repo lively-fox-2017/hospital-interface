@@ -3,12 +3,18 @@
 		"name" : "Dr. Agustinus",
 		"position" : "doctor",
 		"username" : "agustinus",
-		"password" : "123456"
+		"password" : "12345"
 	},
 	{
 		"name" : "Dr. Wisnu DJ",
 		"position" : "doctor",
 		"username" : "wisnu",
+		"password" : "123456"
+	},
+	{
+		"name" : "Pak Jaya",
+		"position" : "office boy",
+		"username" : "jaya",
 		"password" : "1234"
 	},
 	{

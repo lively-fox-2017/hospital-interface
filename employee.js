@@ -30,18 +30,33 @@ class Employee {
   	let result = []
 
   	for(let j = 0; j < data.length; j++){
-  		// console.log(data[j].password)
-  		// console.log('*************' + input_pass)
+  		//console.log(data[j].password)
+  		//console.log('*************' + input_pass)
   		if(input_pass === data[j].password){
   			result.push(data[j].password)
   		}
   	}
-  	//console.log(typeof(result.join()))
+  	//console.log(result.join())
   	return result.join() 
+  }
+
+  static auth_position(input_username){
+  	let result = []
+
+  	for(let k = 0; k< data.length; k++){
+  		//console.log('======' + data[k].username)
+  		//console.log(input_username)
+  		if(input_username === data[k].username){
+  			result.push(data[k].position)
+  		}
+  	}
+  	//console.log(result.join())
+  	return result.join()
   }
 
 }
 
 Employee.auth_userName()
 Employee.auth_passWord()
+Employee.auth_position()
 module.exports = Employee
