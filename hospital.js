@@ -1,10 +1,3 @@
-class Hospital {
-  constructor(name, location, employees, patients) {
-    this.name = name
-    this.employees = employees
-    this.patients = patients
-    this.location = location
-  }
-}
+const LoginController = require('./controllers/login.controller');
 
-module.exports = Hospital
+LoginController.promptUsername();

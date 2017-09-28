@@ -1,0 +1,43 @@
+[
+	{
+		"name": "Hostpital",
+		"employees": [
+			{
+				"id": 1,
+				"name": "Dimitri Wahyudiputra",
+				"level": "admin",
+				"username": "dimitri",
+				"password": "irtimid"
+			},
+			{
+				"id": 2,
+				"name": "Alexei",
+				"level": "doctor",
+				"username": "alexei",
+				"password": "alexei"
+			},
+			{
+				"id": 3,
+				"name": "Sergei",
+				"level": "ob",
+				"username": "sergei",
+				"password": "sergei"
+			}
+		],
+		"patients": [],
+		"location": "Limbo"
+	},
+	{
+		"loggedIn": {
+			"employee": [
+				{
+					"id": 1,
+					"name": "Dimitri Wahyudiputra",
+					"level": "admin",
+					"username": "dimitri",
+					"password": "irtimid"
+				}
+			]
+		}
+	}
+]
