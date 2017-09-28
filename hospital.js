@@ -7,6 +7,8 @@ const rl = readline.createInterface({
   output: process.stdout,
 })
 
+const Table = require('cli-table')
+
 class Hospital {
   constructor(param) {
     this.name = param['name']
@@ -33,9 +35,11 @@ class Hospital {
       } else if (answer == 'ob') {
         this.user = 'ob'
         this.password()
-      } else (
+      } else if (answer == 'quit') {
+        rl.close()
+      } else {
         this.home()
-      )
+      }
     })
   }
 
@@ -70,9 +74,15 @@ class Hospital {
   stafdataList() {
     rl.question('What will you do?\n[1]Staf Lists\n[2]Add Staf\n[3]DeleteStaf\n[4]Back\n\n', (command) => {
       if (command === '1') {
-        employeeArr.forEach(a => {
-          console.log(a);
+        let table = new Table({
+          head:['ID', 'Name', 'Position', 'Username', 'Password'],
+          colwidth:[10,100,100,100,100]
         })
+        employeeArr.forEach((a) => {
+          table.push([a.id, a.name, a.position, a.username, a.password])
+        })
+        console.log(table.toString())
+        console.log('')
         this.stafdataList();
       } else if (command === '2') {
         this.addStaf()
@@ -96,9 +106,13 @@ class Hospital {
 
   deleteStaf() {
     rl.question('Who would you delete?\n', (data) => {
-      if (data !== '1') {
-        employeeArr.splice(Number(data - 1), 1)
+      let id = parseInt(data)
+      if (this.user != employeeArr[id-1].username) {
+        employeeArr.splice((id - 1), 1)
         this.adminOptions()
+      } else {
+        console.log('Masukkan id yang tepat')
+        this.deleteStaf()
       }
     })
   }
@@ -106,9 +120,15 @@ class Hospital {
   doctorOptions() {
     rl.question('What will you do?\n[1]Patients data lists\n[2]Add Patients List\n[3]Delete Patients Lists\n[4]Logout\n\n', (target) => {
       if (target === '1') {
-        patientsArr.forEach(a => {
-          console.log(a);
+        let table = new Table({
+          head: ['ID', 'Name', 'Diagnosis'],
+          colwidth: [10, 100, 100]
         })
+        patientsArr.forEach((a) => {
+          table.push([a.id, a.name, a.diagnosis])
+        })
+        console.log(table.toString())
+        console.log('')
         this.doctorOptions()
       } else if (target === '2') {
         this.addPatients()
