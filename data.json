@@ -1,0 +1,36 @@
+{
+  "name": "Mistic",
+  "employees": [{
+    "id": "101",
+    "name": "Kang Admin",
+    "position": "Admin",
+    "username": "admin",
+    "password": "admin"
+  }, {
+    "id": "102",
+    "name": "Kang doktor",
+    "position": "Doctor",
+    "username": "doctor",
+    "password": "111"
+  }, {
+    "id": "103",
+    "name": "Bang ob",
+    "position": "Ob",
+    "username": "OB",
+    "password": "222"
+  }],
+  "patients": [{
+    "id": "001",
+    "name": "Pasien 1",
+    "diagnosis": "Sehat"
+  }, {
+    "id": "002",
+    "name": "Pasien 2",
+    "diagnosis": "Pura pura sakit"
+  }, {
+    "id": "003",
+    "name": "nama",
+    "diagnosis": "coba"
+  }],
+  "location": "Disini"
+}
