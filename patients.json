@@ -1,0 +1,26 @@
+[
+  {
+    "id": 1,
+    "name": "andhika kangen ban",
+    "diagnosis": "penyakit kegantengan",
+    "arrPatient": []
+  },
+  {
+    "id": 2,
+    "name": "Ian Kasela",
+    "diagnosis": "Sakit hati",
+    "arrPatient": []
+  },
+  {
+    "id": 3,
+    "name": "Anton",
+    "diagnosis": "Kelebihan otot",
+    "arrPatient": []
+  },
+  {
+    "id": 4,
+    "name": "Shinta",
+    "diagnosis": "Campak",
+    "arrPatient": []
+  }
+]
