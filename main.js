@@ -1,5 +1,6 @@
 const readline = require('readline');
 const Hospital = require('./hospital.js');
+const Table = require('cli-table');
 
 var hospital = new Hospital('Mistic', 'Disini');
 hospital.addAdmin('101', 'Kang Admin', 'admin', 'admin');
@@ -34,9 +35,10 @@ function loginPage() {
         found = i;
       }
     }
-    rl.question('Please enter your password :', (password) => {
+    hidden("Please enter your password :", function(password) {
       if (found > -1) {
-        if (password.trim() === hospital.employees[found].password) {
+        if (password === hospital.employees[found].password) {
+          rl.resume();
           currentLogin = hospital.employees[found];
           menuPage();
         } else {
@@ -46,6 +48,18 @@ function loginPage() {
         welcomePage(-1);
       }
     })
+    // rl.question('Please enter your password :', (password) => {
+    //   if (found > -1) {
+    //     if (password.trim() === hospital.employees[found].password) {
+    //       currentLogin = hospital.employees[found];
+    //       menuPage();
+    //     } else {
+    //       welcomePage(-1)
+    //     }
+    //   } else {
+    //     welcomePage(-1);
+    //   }
+    // })
   })
 }
 
@@ -183,7 +197,18 @@ function obMenu() {
 
 function listPatients(cb) {
   var patientList = hospital.showPatientList();
-  console.log(patientList)
+  var table = new Table({
+    head: ['Id', 'Name', 'Diagnosis'],
+    colWidths: [10,20,30],
+  })
+  for(var i =0;i<patientList.length;i++){
+    var tempArr = []
+    tempArr.push(patientList[i].id)
+    tempArr.push(patientList[i].name)
+    tempArr.push(patientList[i].diagnosis)
+    table.push(tempArr)
+  }
+  console.log(table.toString());
   cb();
 }
 
@@ -233,7 +258,24 @@ function removePatient(cb) {
 
 function listEmployee(cb) {
   var employeeList = hospital.showEmployeeList();
-  console.log(employeeList)
+  var table = new Table({
+    head: ['Id', 'Name', 'Position', 'Username', 'Password'],
+    colWidths: [10,20,10,20,20],
+  })
+  for(var i =0;i<employeeList.length;i++){
+    var tempArr = []
+    tempArr.push(employeeList[i].id)
+    tempArr.push(employeeList[i].name)
+    tempArr.push(employeeList[i].position)
+    tempArr.push(employeeList[i].username)
+    var string = "";
+    for(var j = 0;j<employeeList[i].password.length;j++){
+      string += '*';
+    }
+    tempArr.push(string);
+    table.push(tempArr)
+  }
+  console.log(table.toString())
   cb();
 }
 
@@ -297,6 +339,28 @@ function removeEmployee(cb) {
     cb();
   })
 }
-///Main Process
 
+function hidden(query, callback) {
+    var stdin = process.openStdin();
+    var onDataHandler = function(char) {
+         char = char + "";
+         switch (char) {
+           case "\n": case "\r": case "\u0004":
+             // Remove this handler
+             stdin.removeListener("data",onDataHandler);
+             break;//stdin.pause(); break;
+           default:
+             process.stdout.write("\033[2K\033[200D" + query + Array(rl.line.length+1).join("*"));
+           break;
+         }
+     }
+     process.stdin.on("data", onDataHandler);
+
+    rl.question(query, function(value) {
+        rl.history = rl.history.slice(1);
+        callback(value);
+    });
+}
+
+///Main Process
 welcomePage();
