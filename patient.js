@@ -17,7 +17,9 @@ class Patient {
   	Patient.getAll(data => {
   		let c = 0
   		data.forEach(i=>{
-  			c ++
+        if(i.diagnosis == ''){
+    			c ++
+        }
   		})
   		cb(c)
   	})
