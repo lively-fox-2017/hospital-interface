@@ -1,6 +1,6 @@
 const rl =  require('readline');
-const employee=require('./employee')
-const patient=require('./patient')
+const employees=require('./employee')
+const patients=require('./patient')
 const Table = require('cli-table');
 const readline = rl.createInterface({
   input: process.stdin,
@@ -20,12 +20,12 @@ class Hospital {
     this.nama='Mistic Hospital';
     this.alamat='jl. Mistic';
     this.phone='01010101';
-    this.employee=new employee();
+    this.employees=new employees();
     this.userAktif='';
     this.userAktifAkses='';
     this.aktifAkses='';
     this.aktifIdKaryawan='';
-    this.pasien = new patient();
+    this.patients = new patients();
   }
   resetScreen() {
     console.log("\x1B[2J");
@@ -65,11 +65,12 @@ class Hospital {
     });
   }
   validasiUser(user,pass){
-    for (var i = 0; i < this.employee.username.length; i++) {
-      if (user===this.employee.username[i] && pass===this.employee.password[i]) {//console.log('adadswds');
-        this.aktifAkses=this.employee.akses[i];
+    let dataEmployees=this.employees.dataEmployees;
+    for (var i = 0; i < dataEmployees.length; i++) {
+      if (user===dataEmployees[i].username && pass===dataEmployees[i].password) {//console.log('adadswds');
+        this.aktifAkses=dataEmployees[i].position;
         this.aktifUser=user;
-        this.aktifIdKaryawan=this.employee.id[i];
+        this.aktifIdKaryawan=dataEmployees[i].id;
         return true;
       }
     }
@@ -77,7 +78,7 @@ class Hospital {
   }
   setListMenu(){
     this.resetScreen();
-    if (this.aktifAkses=='ADMIN') {
+    if (this.aktifAkses.toUpperCase()=='ADMINISTRATOR') {
       console.log('==Menu Utama==');
       console.log('[1]. Logout');
       console.log('[2]. Hospital');
@@ -108,8 +109,8 @@ class Hospital {
           this.setListMenu();
         }
       });
-    }
-    if (this.aktifAkses=='DOKTER') {
+    } else
+    if (this.aktifAkses.toUpperCase()=='DOKTER') {
       console.log('==Menu Utama==');
       console.log('[1]. Logout');
       console.log('[2]. Dokter');
@@ -127,8 +128,8 @@ class Hospital {
           this.setListMenu();
         }
       });
-    }
-    if (this.aktifAkses=='RESEPSIONIS') {
+    } else
+    if (this.aktifAkses.toUpperCase()=='RESEPSIONIS') {
       console.log('==Menu Utama==');
       console.log('[1]. Logout');
       console.log('[2]. Karyawan');
@@ -150,8 +151,8 @@ class Hospital {
           this.setListMenu();
         }
       });
-    }
-    if (this.aktifAkses=='OB') {
+    } else
+    if (this.aktifAkses.toUpperCase()=='OB') {
       console.log('Kembali Kerja...');
       console.log('==Menu Utama==');
       console.log('[1]. Logout');
@@ -166,6 +167,12 @@ class Hospital {
           this.setListMenu();
         }
       });
+    } else {
+      this.resetScreen();
+      console.log('Terjadi kesalahan dalam hak akses anda, silahkan hubungi administrator');
+      readline.question(`Tekan Enter untuk melanjutkan `,(select)=>{
+        this.login();
+      })
     }
 
   }
@@ -250,21 +257,14 @@ class Hospital {
         this.resetScreen();
         console.log('==Pasien==');
         console.log('==Pasien > Tampil Data Pasien==');
-        // console.log(`=====================================`);
-        // for (var i = 0; i < this.pasien.id.length; i++) {
-        //   console.log(`ID        : ${this.pasien.id[i]}`);
-        //   console.log(`Nama      : ${this.pasien.nama[i]}`);
-        //   console.log(`Diagnosis : ${this.pasien.diagnosis[i]}`);
-        //   console.log(`ID Dokter : ${this.pasien.idDokter[i]}`);
-        //   console.log(`=====================================`);
-        // }
         let table = new Table({
           head:['ID','Nama','Diagnosis','ID Dokter'],
           colWidths:[10,50,50,10]
         })
-        for (var i = 0; i < this.pasien.id.length; i++) {
-          table.push([this.pasien.id[i],this.pasien.nama[i],
-          this.pasien.diagnosis[i],this.pasien.idDokter[i]])
+        let dataPatients=this.patients.dataPatients
+        for (var i = 0; i < dataPatients.length; i++) {
+          table.push([dataPatients[i].id,dataPatients[i].nama,
+          dataPatients[i].diagnosis,dataPatients[i].idDokter])
         }
         console.log(table.toString());
         readline.question('Tekan enter untuk kembali ke menu sebelumnya : ',(select)=>{
@@ -280,7 +280,7 @@ class Hospital {
           readline.question('Nama      : ',(nama)=>{
             readline.question('Diagnosis : ',(diagnosis)=>{
               readline.question('ID Dokter : ',(idDokter)=>{
-                if (this.pasien.simpanDataPasien(id,nama,diagnosis,idDokter)) {
+                if (this.patients.simpanDataPasien(id,nama,diagnosis,idDokter)) {
                   console.log('data berhasil disimpan');
                   readline.question('Tekan enter untuk kembali ke menu sebelumnya: ',(select)=>{
                     this.menuPasien();
@@ -306,61 +306,92 @@ class Hospital {
   }
   menuPasienEditData(){
     this.resetScreen();
-    // let pasien = new Patient();
-    console.log('==Pasien==');
+    if (this.aktifAkses.toUpperCase()=='DOKTER') {
+      console.log('==Dokter==');
+    } else {
+      console.log('==Pasien==');
+    }
     console.log('==Pasien > Edit Data Pasien==');
-    console.log(`Masukan ID Data Lama : `);
-    readline.question('ID : ',(oldId)=>{
-      if (this.pasien.cekDataPasien(oldId).length>0) {
-        console.log(`Nama      : ${this.pasien.cekDataPasien(oldId)[1]}`);
-        console.log(`Diagnosis : ${this.pasien.cekDataPasien(oldId)[2]}`);
-        console.log(`ID Dokter : ${this.pasien.cekDataPasien(oldId)[3]}`);
-        console.log(``);
-        console.log(`Masukan Data Pasien Pengganti : `);
-        readline.question('ID Baru        : ',(id)=>{
-          readline.question('Nama Baru      : ',(nama)=>{
-            readline.question('Diagnosis Baru : ',(diagnosis)=>{
-              readline.question('ID Dokter      : ',(idDokter)=>{
-                if (this.pasien.editDataPasien(oldId,id,nama,diagnosis,idDokter)) {
-                  console.log('data berhasil disimpan!');
-                  readline.question('Tekan enter untuk kembali ke menu sebelumnya: ',(select)=>{
-                    this.menuPasien();
+    console.log(`Masukan ID Data Lama / ketik "skip" untuk kembali ke menu sebelumnya : `);
+    readline.question('ID        : ',(oldId)=>{
+      if (oldId=='skip') {
+        if (this.aktifAkses.toUpperCase()=='DOKTER') {
+          this.menuDokter();
+        } else {
+          this.menuPasien();
+        }
+      } else {
+        let dataPatient=this.patients.cekDataPasien(oldId)
+        if (dataPatient.length>0) {
+          console.log(`Nama      : ${dataPatient[0].nama}`);
+          console.log(`Diagnosis : ${dataPatient[0].diagnosis}`);
+          console.log(`ID Dokter : ${dataPatient[0].idDokter}`);
+          console.log(``);
+          console.log(`Masukan Data Pengganti / ketik "skip" untuk membatalkan : `);
+          readline.question('ID Baru        : ',(id)=>{
+            if (id=='skip') {
+              this.menuPasienEditData();
+            } else {
+              readline.question('Nama Baru      : ',(nama)=>{
+                readline.question('Diagnosis Baru : ',(diagnosis)=>{
+                  readline.question('ID Dokter      : ',(idDokter)=>{
+                    if (this.patients.editDataPasien(oldId,id,nama,diagnosis,idDokter)) {
+                      console.log('data berhasil disimpan!');
+                      readline.question('Tekan enter untuk edit data lainnya / ketik "skip" untuk kembali ke menu sebelumnya: ',(select)=>{
+                        if (select=='skip') {
+                          if (this.aktifAkses.toUpperCase()=='DOKTER') {
+                            this.menuDokter();
+                          } else {
+                            this.menuPasien();
+                          }
+                        } else {
+                          this.menuPasienEditData();
+                        }
+                      })
+                    } else this.menuPasienEditData();
                   })
-                } else this.menuPasienEditData();
+                })
               })
-            })
+            }
           })
-        })
-      } else this.menuPasienEditData();
+        } else this.menuPasienEditData();
+      }
     });
   }
   menuPasienHapusData(){
     this.resetScreen();
-    // let pasien = new Patient();
     console.log('==Pasien==');
     console.log('==Pasien > Hapus Data Pasien==');
-    console.log(`Masukan ID Data Lama : `);
-    readline.question('ID : ',(oldId)=>{
-      if (this.pasien.cekDataPasien(oldId).length>0) {
-        console.log(`Nama      : ${this.pasien.cekDataPasien(oldId)[1]}`);
-        console.log(`Diagnosis : ${this.pasien.cekDataPasien(oldId)[2]}`);
-        console.log(`ID Dokter : ${this.pasien.cekDataPasien(oldId)[3]}`);
-        readline.question('Anda yakin akan mau menghapus data ini? tekan y untuk melanjutkan atau tekan enter untuk membatalkan: ',(answer)=>{
-          if (answer=='y') {
-            if (this.pasien.deleteDataPasien(oldId)) {
-              console.log('data berhasil dihapus!');
-              readline.question('Tekan enter untuk kembali ke menu sebelumnya: ',(select)=>{
-                this.menuPasien();
-              })
+    console.log(`Masukan ID Data Lama / ketik "skip" untuk kembali ke menu sebelumnya : `);
+    readline.question('ID        : ',(oldId)=>{
+      if (oldId=='skip') {
+        this.menuPasien();
+      } else {
+        let dataPatient=this.patients.cekDataPasien(oldId);
+        if (dataPatient.length>0) {
+          console.log(`Nama      : ${dataPatient[0].nama}`);
+          console.log(`Diagnosis : ${dataPatient[0].diagnosis}`);
+          console.log(`ID Dokter : ${dataPatient[0].idDokter}`);
+          readline.question('Anda yakin akan mau menghapus data ini? tekan y untuk melanjutkan atau tekan enter untuk membatalkan: ',(answer)=>{
+            if (answer=='y') {
+              if (this.patients.deleteDataPasien(oldId)) {
+                console.log('data berhasil dihapus!');
+                readline.question('Tekan enter untuk menghapus data lainnya / ketik "skip" untuk kembali ke menu sebelumnya: ',(select)=>{
+                  if (select=='skip') {
+                    this.menuPasien();
+                  } else {
+                    this.menuPasienHapusData();
+                  }
+                })
+              } else this.menuPasienHapusData();
             } else this.menuPasienHapusData();
-          } else this.menuPasienHapusData();
-        })
-      } else this.menuPasienHapusData();
+          })
+        } else this.menuPasienHapusData();
+      }
     });
   }
   menuKaryawan(){
     this.resetScreen();
-    // let pasien = new Patient();
     console.log('==Karyawan==');
     console.log('[1]. Logout');
     console.log('[2]. Menu Sebelumnya');
@@ -381,23 +412,14 @@ class Hospital {
         this.resetScreen();
         console.log('==Karyawan==');
         console.log('==Karyawan > Tampil Data Karyawan==');
-        // console.log(`=====================================`);
-        // for (var i = 1; i < this.employee.id.length; i++) {
-        //   console.log(`ID       : ${this.employee.id[i]}`);
-        //   console.log(`Nama     : ${this.employee.nama[i]}`);
-        //   console.log(`Position : ${this.employee.position[i]}`);
-        //   console.log(`Username : ${this.employee.username[i]}`);
-        //   console.log(`Password : ${this.employee.password[i]}`);
-        //   console.log(`Akses    : ${this.employee.akses[i]}`);
-        //   console.log(`=====================================`);
-        // }
         let table = new Table({
-          head:['ID','Nama','Position','Username','Akses'],
-          colWidths:[10,50,25,20,20]
+          head:['ID','Nama','Position','Username'],
+          colWidths:[10,50,25,20]
         })
-        for (var i = 0; i < this.employee.id.length; i++) {
-          table.push([this.employee.id[i],this.employee.nama[i],
-          this.employee.position[i],this.employee.username[i],this.employee.akses[i]])
+        let dataEmployees=this.employees.dataEmployees;
+        for (var i = 0; i < dataEmployees.length; i++) {
+          table.push([dataEmployees[i].id,dataEmployees[i].nama,
+          dataEmployees[i].position,dataEmployees[i].username])
         }
         console.log(table.toString());
         readline.question('Tekan enter untuk kembali ke menu sebelumnya : ',(select)=>{
@@ -414,14 +436,12 @@ class Hospital {
             readline.question('Position : ',(position)=>{
               readline.question('Username : ',(username)=>{
                 readline.question('Password : ',(password)=>{
-                  readline.question('Akses    : ',(akses)=>{
-                    if (this.employee.simpanDataKaryawan(id,nama,position,username,password,akses.toUpperCase())) {
-                      console.log('data berhasil disimpan');
-                      readline.question('Tekan enter untuk kembali ke menu sebelumnya: ',(select)=>{
-                        this.menuKaryawan();
-                      })
-                    }
-                  })
+                  if (this.employees.simpanDataKaryawan(id,nama,position,username,password)) {
+                    console.log('data berhasil disimpan');
+                    readline.question('Tekan enter untuk kembali ke menu sebelumnya: ',(select)=>{
+                      this.menuKaryawan();
+                    })
+                  }
                 })
               })
             })
@@ -443,74 +463,90 @@ class Hospital {
   }
   menuKaryawanEditData(){
     this.resetScreen();
-    // let pasien = new Patient();
     console.log('==Karyawan==');
     console.log('==Karyawan > Edit Data Karyawan==');
-    console.log(`Masukan ID Data Lama : `);
+    console.log(`Masukan ID Data Lama / ketik "skip" untuk kembali ke menu sebelumnya : `);
     readline.question('ID       : ',(oldId)=>{
-      if (this.employee.cekDataKaryawan(oldId).length>0) {
-        console.log(`Nama     : ${this.employee.cekDataKaryawan(oldId)[1]}`);
-        console.log(`position : ${this.employee.cekDataKaryawan(oldId)[2]}`);
-        console.log(`username : ${this.employee.cekDataKaryawan(oldId)[3]}`);
-        console.log(`password : ${this.employee.cekDataKaryawan(oldId)[4]}`);
-        console.log(`akses    : ${this.employee.cekDataKaryawan(oldId)[5]}`);
-        console.log('');
-        console.log(`Masukan Data Pengganti : `);
-        readline.question('ID Baru        : ',(id)=>{
-          readline.question('Nama Baru      : ',(nama)=>{
-            readline.question('Position Baru  : ',(position)=>{
-              readline.question('Username Baru  : ',(username)=>{
-                readline.question('Pasword Baru   : ',(password)=>{
-                  readline.question('Akses Baru     : ',(akses)=>{
-                    if (this.employee.editDataKaryawan(oldId,id,nama,position,username,password,akses)) {
-                      console.log('data berhasil disimpan!');
-                      readline.question('Tekan enter untuk kembali ke menu sebelumnya: ',(select)=>{
-                        this.menuKaryawan();
-                      })
-                    } else this.menuKaryawanEditData();
+      if (oldId=='skip') {
+        this.menuKaryawan();
+      } else {
+        let dataEmployee=this.employees.cekDataKaryawan(oldId);
+        if (dataEmployee.length>0) {
+          console.log(`Nama     : ${dataEmployee[0].nama}`);
+          console.log(`position : ${dataEmployee[0].position}`);
+          console.log(`username : ${dataEmployee[0].username}`);
+          console.log(`password : ${dataEmployee[0].password}`);
+          console.log('');
+          console.log(`Masukan Data Pengganti / ketik "skip" untuk membatalkan : `);
+          readline.question('ID Baru        : ',(id)=>{
+            if (id=='skip') {
+              this.menuKaryawanEditData();
+            } else {
+              readline.question('Nama Baru      : ',(nama)=>{
+                readline.question('Position Baru  : ',(position)=>{
+                  readline.question('Username Baru  : ',(username)=>{
+                    readline.question('Pasword Baru   : ',(password)=>{
+                      if (this.employees.editDataKaryawan(oldId,id,nama,position,username,password)) {
+                        console.log('data berhasil disimpan!');
+                        readline.question('Tekan enter untuk edit data lainnya / ketik "skip" untuk kembali ke menu sebelumnya: ',(select)=>{
+                          if (select=='skip') {
+                            this.menuKaryawan();
+                          } else {
+                            this.menuKaryawanEditData();
+                          }
+                        })
+                      } else this.menuKaryawanEditData();
+                    })
                   })
                 })
               })
-            })
+            }
           })
-        })
-      } else this.menuKaryawanEditData();
+        } else this.menuKaryawanEditData();
+      }
     });
   }
   menuKaryawanHapusData(){
     this.resetScreen();
-    // let pasien = new Patient();
     console.log('==Karyawan==');
     console.log('==Karyawan > Hapus Data Karyawan==');
-    console.log(`Masukan ID Data Lama : `);
-    readline.question('ID : ',(oldId)=>{
-      if (this.employee.cekDataKaryawan(oldId).length>0) {
-        console.log(`Nama     : ${this.employee.cekDataKaryawan(oldId)[1]}`);
-        console.log(`position : ${this.employee.cekDataKaryawan(oldId)[2]}`);
-        console.log(`username : ${this.employee.cekDataKaryawan(oldId)[3]}`);
-        console.log(`password : ${this.employee.cekDataKaryawan(oldId)[4]}`);
-        console.log(`akses    : ${this.employee.cekDataKaryawan(oldId)[5]}`);
-        readline.question('Anda yakin akan mau menghapus data ini? tekan y untuk melanjutkan atau tekan enter untuk membatalkan: ',(answer)=>{
-          if (answer=='y') {
-            if (this.employee.deleteDataKaryawann(oldId)) {
-              console.log('data berhasil dihapus!');
-              readline.question('Tekan enter untuk kembali ke menu sebelumnya: ',(select)=>{
-                this.menuKaryawan();
-              })
+    console.log(`Masukan ID Data Lama / ketik "skip" untuk kembali ke menu sebelumnya : `);
+    readline.question('ID       : ',(oldId)=>{
+      if (oldId=='skip') {
+        this.menuKaryawan();
+      } else {
+        let dataEmployee=this.employees.cekDataKaryawan(oldId);
+        if (dataEmployee.length>0) {
+          console.log(`Nama     : ${dataEmployee[0].nama}`);
+          console.log(`position : ${dataEmployee[0].position}`);
+          console.log(`username : ${dataEmployee[0].username}`);
+          console.log(`password : ${dataEmployee[0].password}`);
+          readline.question('Anda yakin akan mau menghapus data ini? tekan y untuk melanjutkan atau tekan enter untuk membatalkan: ',(answer)=>{
+            if (answer=='y') {
+              if (this.employees.deleteDataKaryawann(oldId)) {
+                console.log('data berhasil dihapus!');
+                readline.question('Tekan enter untuk menghapus data lainnya / ketik "skip" untuk kembali ke menu sebelumnya: ',(select)=>{
+                  if (select=='skip') {
+                    this.menuKaryawan();
+                  } else {
+                    this.menuKaryawanHapusData();
+                  }
+                })
+              } else this.menuKaryawanHapusData();
             } else this.menuKaryawanHapusData();
-          } else this.menuKaryawanHapusData();
-        })
-      } else this.menuKaryawanHapusData();
+          })
+        } else this.menuKaryawanHapusData();
+      }
     });
   }
   menuDokter(){
     this.resetScreen();
-    // let pasien = new Patient();
     console.log('==Dokter==');
     console.log('[1]. Logout');
     console.log('[2]. Menu Sebelumnya');
     console.log('[3]. Tampil Data Pasien');
-    console.log('[4]. Keluar');
+    console.log('[4]. Edit Data Pasien');
+    console.log('[5]. Keluar');
     readline.question('Masukan Pilihan Menu : ',(select)=>{
       if (select==1) {
         this.login();
@@ -523,43 +559,28 @@ class Hospital {
         this.resetScreen();
         console.log('==Dokter==');
         console.log('==Dokter > Tampil Data Pasien==');
-        console.log(`=====================================`);
-        if (this.aktifAkses!=='ADMIN') {
-          // for (var i = 0; i < this.pasien.id.length; i++) {
-          //   // console.log(this.pasien.idDokter+`==`+this.aktifIdKaryawan);
-          //   if (this.pasien.idDokter[i]==this.aktifIdKaryawan) {
-          //     console.log(`ID        : ${this.pasien.id[i]}`);
-          //     console.log(`Nama      : ${this.pasien.nama[i]}`);
-          //     console.log(`Diagnosis : ${this.pasien.diagnosis[i]}`);
-          //     console.log(`ID Dokter : ${this.pasien.idDokter[i]}`);
-          //     console.log(`=====================================`);
-          //   }
-          // }
+        let dataPatients=this.patients.dataPatients
+        if (this.aktifAkses.toUpperCase()!=='ADMINISTRATOR') {
           let table = new Table({
             head:['ID','Nama','Diagnosis','Id Dokter'],
             colWidths:[10,50,25,10]
           })
-          for (var i = 0; i < this.pasien.id.length; i++) {
-            table.push([this.pasien.id[i],this.pasien.nama[i],
-            this.pasien.diagnosis[i],this.pasien.idDokter[i]])
+          for (var i = 0; i < dataPatients.length; i++) {
+            if (dataPatients[i].idDokter==this.aktifIdKaryawan) {
+              table.push([dataPatients[i].id,dataPatients[i].nama,
+              dataPatients[i].diagnosis,dataPatients[i].idDokter])
+            }
           }
           console.log(table.toString());
         } else
         {
-          // for (var i = 0; i < this.pasien.id.length; i++) {
-          //   console.log(`ID        : ${this.pasien.id[i]}`);
-          //   console.log(`Nama      : ${this.pasien.nama[i]}`);
-          //   console.log(`Diagnosis : ${this.pasien.diagnosis[i]}`);
-          //   console.log(`ID Dokter : ${this.pasien.idDokter[i]}`);
-          //   console.log(`=====================================`);
-          // }
           let table = new Table({
             head:['ID','Nama','Diagnosis','Id Dokter'],
             colWidths:[10,50,25,10]
           })
-          for (var i = 0; i < this.pasien.id.length; i++) {
-            table.push([this.pasien.id[i],this.pasien.nama[i],
-            this.pasien.diagnosis[i],this.pasien.idDokter[i]])
+          for (var i = 0; i < dataPatients.length; i++) {
+            table.push([dataPatients[i].id,dataPatients[i].nama,
+            dataPatients[i].diagnosis,dataPatients[i].idDokter])
           }
           console.log(table.toString());
         }
@@ -568,6 +589,9 @@ class Hospital {
         })
       } else
       if (select==4){
+        this.menuPasienEditData();
+      } else
+      if (select==5){
         readline.close();
       } else {
         this.menuDokter();

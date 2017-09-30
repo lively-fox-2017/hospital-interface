@@ -1,5 +1,6 @@
 // class Employee {
-//   constructor(name, position, username, password) {
+//   constructor(id, name, position, username, password) {
+//     this.id = id
 //     this.name = name
 //     this.position = position
 //     this.username = username
@@ -7,63 +8,49 @@
 //   }
 // }
 
-class Employee {
+class Employees {
   constructor() {
-    //level akses ADMIN,DOKTER,RESEPSIONIS,OB
-    this.id = [1,2,3,4,5];
-    this.nama = ['Budi','Vidia','Dodi','Badu','Siti'];
-    this.position = ['administrator','dokter','resepsionis','ob','dokter'];
-    this.username = ['admin','vidia','dodi','badu','siti'];
-    this.password = ['adminjos01','vidiajos01','dodijos01','badu01','siti01'];
-    this.akses = ['ADMIN','DOKTER','RESEPSIONIS','OB','DOKTER'];
+    this.dataEmployees=[{"id":"1","nama":"Budi","position":"administrator","username":"admin","password":"admin01"},
+                        {"id":"2","nama":"Vidia","position":"dokter","username":"vidia","password":"vidia01"},
+                        {"id":"3","nama":"Dodi","position":"resepsionis","username":"dodi","password":"dodi01"},
+                        {"id":"4","nama":"Badu","position":"ob","username":"badu","password":"badu01"},
+                        {"id":"5","nama":"Siti","position":"dokter","username":"siti","password":"siti01"}
+                      ];
   }
-  simpanDataKaryawan(id,nama,position,username,password,akses){
-    // console.log(id,nama);
-    this.id.push(id);
-    this.nama.push(nama);
-    this.position.push(position);
-    this.username.push(username);
-    this.password.push(password);
-    this.akses.push(akses);
+  simpanDataKaryawan(id,nama,position,username,password){
+    let newEmployee={"id":id,"nama":nama,"position":position,"username":username,"password":password};
+    this.dataEmployees.push(newEmployee);
+    // console.log(this.dataEmployees);
     return true;
   }
-  editDataKaryawan(oldid,newid,newnama,newposition,newusername,newpassword,newakses){
-    // console.log(oldid+','+newid+','+newnama+','+newposition+','+newusername+','+newpassword+','+newakses);
-    for (var i = 0; i < this.id.length; i++) {
-      if (oldid==this.id[i]){
-        this.id[i]=newid;
-        this.nama[i]=newnama;
-        this.position[i]=newposition;
-        this.username[i]=newusername;
-        this.password[i]=newpassword;
-        this.akses[i]=newakses;
-        return true;
-      }
-    }
-    return false;
+  editDataKaryawan(oldid,id,nama,position,username,password){
+    let newEmployee={"id":id,"nama":nama,"position":position,"username":username,"password":password};
+    let newDataEmployees=this.dataEmployees.map(x=>{
+          if (oldid==x.id) {
+            return newEmployee;
+          } else {
+            return x
+          }
+        })
+    this.dataEmployees=newDataEmployees;
+    return true;
   }
   deleteDataKaryawann(olId){
-    for (var i = 0; i < this.id.length; i++) {
-      if (olId==this.id[i]){
-        this.id.splice(i,1);
-        this.nama.splice(i,1);
-        this.position.splice(i,1);
-        this.username.splice(i,1);
-        this.password.splice(i,1);
-        this.akses.splice(i,1);
+    for (var i = 0; i < this.dataEmployees.length; i++) {
+      if (olId==this.dataEmployees[i].id){
+        this.dataEmployees.splice(i,1);
         return true;
       }
     }
     return false;
   }
   cekDataKaryawan(olId){
-    for (var i = 0; i < this.id.length; i++) {
-      if (olId==this.id[i]){
-        //return [this.id[i],this.nama[i],this.position[i],this.username.splice(i,1),this.password.splice(i,1),this.akses.splice(i,1)];
-        return [this.id[i],this.nama[i],this.position[i],this.username[i],this.password[i],this.akses[i]];
+    for (var i = 0; i < this.dataEmployees.length; i++) {
+      if (olId==this.dataEmployees[i].id){
+        return [this.dataEmployees[i]];
       }
     }
-    return '';
+    return [];
   }
 }
-module.exports = Employee
+module.exports = Employees

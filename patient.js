@@ -5,53 +5,48 @@
 //     this.diagnosis = diagnosis
 //   }
 // }
-class Patient {
+class Patients {
   constructor() {
-    this.id = [1,2,3]
-    this.nama = ['Budi','Tono','Vidia']
-    this.diagnosis = ['Batuk','Pilek','Demam']
-    this.idDokter = [2,2,5]
+    this.dataPatients=[
+                        {"id":"1","nama":"Budi","diagnosis":"Batuk","idDokter":"2"},
+                        {"id":"2","nama":"Tono","diagnosis":"Pilek","idDokter":"2"},
+                        {"id":"3","nama":"Vidia","diagnosis":"Demam","idDokter":"5"}
+                      ]
   }
   simpanDataPasien(id,nama,diagnosis,idDokter){
-    // console.log(id,nama,diagnosis);
-    this.id.push(id);
-    this.nama.push(nama);
-    this.diagnosis.push(diagnosis);
-    this.idDokter.push(idDokter);
+    let newPatient={"id":id,"nama":nama,"diagnosis":diagnosis,"idDokter":idDokter}
+    this.dataPatients.push(newPatient);
     return true;
   }
-  editDataPasien(oldid,newid,newnama,newdiagnosis,newidDokter){
-    for (var i = 0; i < this.id.length; i++) {
-      if (oldid==this.id[i]){
-        this.id[i]=newid;
-        this.nama[i]=newnama;
-        this.diagnosis[i]=newdiagnosis;
-        this.idDokter[i]=newidDokter;
-        return true;
-      }
-    }
-    return false;
+  editDataPasien(oldid,id,nama,diagnosis,idDokter){
+    let newPatient={"id":id,"nama":nama,"diagnosis":diagnosis,"idDokter":idDokter}
+    let newDataPatients=this.dataPatients.map(x=>{
+          if (oldid==x.id) {
+            return newPatient;
+          } else {
+            return x
+          }
+        })
+    this.dataPatients=newDataPatients;
+    return true;
   }
   deleteDataPasien(olId){
-    for (var i = 0; i < this.id.length; i++) {
-      if (olId==this.id[i]){
-        this.id.splice(i,1);
-        this.nama.splice(i,1);
-        this.diagnosis.splice(i,1);
-        this.idDokter.splice(i,1);
+    for (var i = 0; i < this.dataPatients.length; i++) {
+      if (olId==this.dataPatients[i].id){
+        this.dataPatients.splice(i,1);
         return true;
       }
     }
     return false;
   }
   cekDataPasien(olId){
-    for (var i = 0; i < this.id.length; i++) {
-      if (olId==this.id[i]){
-        return [this.id[i],this.nama[i],this.diagnosis[i],this.idDokter[i]];
+    for (var i = 0; i < this.dataPatients.length; i++) {
+      if (olId==this.dataPatients[i].id){
+        return [this.dataPatients[i]];
       }
     }
-    return '';
+    return [];
   }
 }
 
-module.exports = Patient
+module.exports = Patients
